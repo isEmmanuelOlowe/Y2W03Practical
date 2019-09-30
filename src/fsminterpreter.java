@@ -1,6 +1,9 @@
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.util.Scanner;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 /**
 * The finite state machine interpreter.
 * Runs a finite state machine from a description given on a set of input.
@@ -27,7 +30,7 @@ public class fsminterpreter {
   */
   public void run(String descriptionFile) {
     //if machine can't build description was bad
-    if (build() == false) {
+    if (build(descriptionFile) == false) {
       BadDescription();
     }
     //If the machine can't run input was bad
@@ -39,20 +42,31 @@ public class fsminterpreter {
   /**
   * Builds the model for the finite state machine.
   *
+  * @param descriptionFile the file in which describes the finite state machine
   * @return true if machime successful builds from description file.
   */
-  public boolean build() {
-    finiteStatemachine = new FiniteStateMachine();
-    BufferedReader description = new BufferedReader(new FileReader(descriptionFile));
-    while ((line = description.readLine()) != null) {
+  public boolean build(String descriptionFile) {
+    try {
+
+      FiniteStateMachine finiteStateMachine = new FiniteStateMachine();
+      BufferedReader description = new BufferedReader(new FileReader(descriptionFile));
+      String line;
+      while ((line = description.readLine()) != null) {
         if (finiteStateMachine.addState(line) == false) {
           return false;
         }
+      }
+      if (finiteStateMachine.verifyStates() != false) {
+        return false;
+      }
+      return true;
     }
-    if (finiteStateMachine.verifyStates() != false) {
+    catch (FileNotFoundException e){
       return false;
     }
-    return true;
+    catch (IOException e) {
+      return false;
+    }
   }
 
   /**

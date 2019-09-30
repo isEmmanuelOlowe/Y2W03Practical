@@ -78,7 +78,7 @@ public class FiniteStateMachine {
   * @param b the second being being joined to the first.
   * @return the joined strings
   */
-  public String join(String a, Strinb b) {
+  public String join(String a, String b) {
     return a + b;
   }
 
