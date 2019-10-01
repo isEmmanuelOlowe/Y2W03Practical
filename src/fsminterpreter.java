@@ -48,17 +48,24 @@ public class fsminterpreter {
   public boolean build(String descriptionFile) {
     try {
 
-      FiniteStateMachine finiteStateMachine = new FiniteStateMachine();
+      finiteStateMachine = new FiniteStateMachine();
       BufferedReader description = new BufferedReader(new FileReader(descriptionFile));
-      String line;
-      while ((line = description.readLine()) != null) {
+      String line = description.readLine();
+      while (line != null) {
         if (finiteStateMachine.addState(line) == false) {
+          description.close();
           return false;
         }
+        line = description.readLine();
+        if (line != null) {          
+          line = (line.isEmpty())? null : line;
+        }
       }
-      if (finiteStateMachine.verifyStates() != false) {
+      if (finiteStateMachine.verifyStates() == false) {
+        description.close();
         return false;
       }
+      description.close();
       return true;
     }
     catch (FileNotFoundException e){
@@ -93,7 +100,7 @@ public class fsminterpreter {
   * Notifies the user the description of the finite state machine is invalid and closes the program.
   */
   public void BadDescription() {
-    System.out.println("Bad Description");
+    System.out.println("Bad description");
     System.exit(0);
   }
 
@@ -101,7 +108,7 @@ public class fsminterpreter {
   * Notifies the user the input is not valid and closes the program.
   */
   public void BadInput() {
-    System.out.println("Bad Input");
+    System.out.println("Bad input");
     System.exit(0);
   }
 }

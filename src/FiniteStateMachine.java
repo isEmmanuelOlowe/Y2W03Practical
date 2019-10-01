@@ -21,6 +21,15 @@ public class FiniteStateMachine {
   //The output string displayed.
   private String outputString = "";
 
+
+  public FiniteStateMachine () {
+    states = new HashSet<String>();
+    inputs = new HashSet<String>();
+    nextStates = new HashSet<String>();
+    outputFunction = new HashMap<String, String>();
+    nextStateFunction = new HashMap<String, String>();
+  }
+
   /**
   * Adds a new state into the finite state machine.
   *
@@ -62,7 +71,7 @@ public class FiniteStateMachine {
   public boolean runInput(String input){
     if (inputs.contains(input)) {
       //adds the output of state to output string that will be displayed.
-      outputString += outputFunction.get(join(currentState, input));
+      System.out.print(outputFunction.get(join(currentState, input)));
       currentState = nextStateFunction.get(join(currentState, input));
       return true;
     }
