@@ -12,8 +12,9 @@ public class FiniteStateMachine {
   private HashSet<String> states;
   //Stores all the valid inputs to the finite state machine
   private HashSet<String> inputs;
-  //Represents the output function
+  //states which will be redirected to.
   private HashSet<String> nextStates;
+  //Represents the output function
   private HashMap<String, String> outputFunction;
   //Represents the next state function
   private HashMap<String, String> nextStateFunction;
@@ -43,7 +44,8 @@ public class FiniteStateMachine {
     final int NextState = 3;
 
     //Checks that there are only 4 columns and only 1 character spereated by white space.
-    if (description.matches("[\\s]*.[\\s]+.[\\s]+.[\\s]+.[\\s]*")) {
+    //If it deviates from pattern it is rejected.
+    if (!description.matches("[\\s]*.[\\s]+.[\\s]+.[\\s]+.[\\s]*")) {
       return false;
     }
     //Splits by space
@@ -53,11 +55,12 @@ public class FiniteStateMachine {
     if (currentState == null) {
       //Adds the first set to next states in event first state is never returned to.
       currentState = row[State];
+      //since we might not return to the first state.
       nextStates.add(row[State]);
     }
 
     //Checks for non determinism
-    if (outputFunction.contains(join(row[state], row[input]))) {
+    if (outputFunction.containsKey(join(row[State], row[Input]))) {
       return false;
     }
     //adds the state to the set of sets
@@ -114,7 +117,7 @@ public class FiniteStateMachine {
       return false;
     }
     for (String state: states) {
-      for (String input: input) {
+      for (String input: inputs) {
         if (!outputFunction.containsKey(join(state, input))) {
           return false;
         }

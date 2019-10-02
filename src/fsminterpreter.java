@@ -10,7 +10,7 @@ import java.io.IOException;
 */
 public class fsminterpreter {
 
-  FiniteStateMachine finiteStateMachine;
+  private FiniteStateMachine finiteStateMachine;
 
   /**
   * Runs the program
@@ -94,7 +94,6 @@ public class fsminterpreter {
         return false;
       }
     }
-    finiteStateMachine.displayOutput();
     return true;
 
   }
