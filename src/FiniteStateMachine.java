@@ -3,7 +3,6 @@ import java.util.HashSet;
 
 /**
  Represents a finite state machine
-*
 */
 public class FiniteStateMachine {
 
@@ -18,10 +17,10 @@ public class FiniteStateMachine {
   private HashMap<String, String> outputFunction;
   //Represents the next state function
   private HashMap<String, String> nextStateFunction;
-  //The output string displayed.
-  private String outputString = "";
 
-
+  /**
+  * Initialises the finite state machine.
+  */
   public FiniteStateMachine () {
     states = new HashSet<String>();
     inputs = new HashSet<String>();
@@ -41,20 +40,25 @@ public class FiniteStateMachine {
     final int State = 0;
     final int Input = 1;
     final int Output = 2;
-    final int NextState =3;
+    final int NextState = 3;
 
+    //Checks that there are only 4 columns and only 1 character spereated by white space.
+    if (description.matches("[\\s]*.[\\s]+.[\\s]+.[\\s]+.[\\s]*")) {
+      return false;
+    }
     //Splits by space
     String[] row = description.split("\\s+");
 
-    //Checks that there are only 4 columns.
-    if (row.length != 4) {
-      return false;
-    }
     //Sets the first entry to the initial state the program will begin.
     if (currentState == null) {
       //Adds the first set to next states in event first state is never returned to.
       currentState = row[State];
       nextStates.add(row[State]);
+    }
+
+    //Checks for non determinism
+    if (outputFunction.contains(join(row[state], row[input]))) {
+      return false;
     }
     //adds the state to the set of sets
     states.add(row[State]);
@@ -68,6 +72,13 @@ public class FiniteStateMachine {
     return true;
   }
 
+
+  /**
+  * Runs the finite state machine for some input and moves to next state.
+  *
+  * @param input the symbol being inputted into machine
+  * @return returns true if the machine successful ran
+  */
   public boolean runInput(String input){
     if (inputs.contains(input)) {
       //adds the output of state to output string that will be displayed.
@@ -80,6 +91,7 @@ public class FiniteStateMachine {
     }
 
   }
+
   /**
   * Joins to strings together
   *
@@ -94,18 +106,20 @@ public class FiniteStateMachine {
 
   /**
   * Determines that all the states which are in the set of states are present in the next state functions
+  *
+  * @return true if the state definitions are valid.
   */
   public boolean verifyStates() {
-    if (states.equals(nextStates)) {
-      return true;
+    if (!states.equals(nextStates)) {
+      return false;
     }
-    return false;
-  }
-
-  /**
-  * Displays the output String.
-  */
-  public void displayOutput() {
-    System.out.println(outputString);
+    for (String state: states) {
+      for (String input: input) {
+        if (!outputFunction.containsKey(join(state, input))) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 }

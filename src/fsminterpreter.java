@@ -47,20 +47,23 @@ public class fsminterpreter {
   */
   public boolean build(String descriptionFile) {
     try {
-
+      //Creates a instance of the finite state machine
       finiteStateMachine = new FiniteStateMachine();
+      //imports the .fsm file
       BufferedReader description = new BufferedReader(new FileReader(descriptionFile));
       String line = description.readLine();
+      //Checks each line is valid and continues to the next
       while (line != null) {
         if (finiteStateMachine.addState(line) == false) {
           description.close();
           return false;
         }
         line = description.readLine();
-        if (line != null) {          
+        if (line != null) {
           line = (line.isEmpty())? null : line;
         }
       }
+      //Verifies some attributes of the states
       if (finiteStateMachine.verifyStates() == false) {
         description.close();
         return false;
